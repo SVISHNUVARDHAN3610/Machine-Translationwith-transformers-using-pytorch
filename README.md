@@ -6,7 +6,8 @@ here we used Opous book dataset from huggingface
 
 download dataset from huggingface using below code:
 
-'''from datasets import load_dataset
+'''python
+from datasets import load_dataset
 
 dataset = load_dataset("opus_books")'''
 
