@@ -6,10 +6,11 @@ here we used Opous book dataset from huggingface
 
 download dataset from huggingface using below code:
 
-'''python
+'''{python}
 from datasets import load_dataset
 
-dataset = load_dataset("opus_books")'''
+dataset = load_dataset("opus_books")
+'''
 
  **You can get tokenization and preprocess weights in Weights folder named as**
 * eng_tokens
