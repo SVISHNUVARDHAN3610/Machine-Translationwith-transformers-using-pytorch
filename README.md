@@ -10,8 +10,7 @@ from datasets import load_dataset
 
 dataset = load_dataset("opus_books")
 
-I already loaded tokenization weights and preprocessing weights 
-* You can get tokenization and preprocess weights in Weights folder named as
+ You can get tokenization and preprocess weights in Weights folder named as
 * eng_tokens
 * frn_tokens
 * english_preprocessing
