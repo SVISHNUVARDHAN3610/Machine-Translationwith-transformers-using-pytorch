@@ -4,7 +4,7 @@ Aim :- To translate English language to French language with Transformer using p
 
 here we used Opous book dataset from huggingface
 
-download dataset:
+download dataset from huggingface using below code:
 
 from datasets import load_dataset
 
