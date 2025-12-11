@@ -54,6 +54,18 @@ graph TD
 ```
 📄 **Original Paper:** [Read "Attention Is All You Need" on arXiv](https://arxiv.org/abs/1706.03762)
 
+# Components Implemented
+
+* Token embedding layer
+* Sinusoidal positional encoding
+* Scaled dot-product attention
+* Multi-head attention
+* Encoder block (Self-attention + Feed Forward + Layer Norm + Residual)
+* Decoder block (Masked self-attention + Cross-attention + Feed Forward)
+* Linear output projection
+* Softmax-based prediction
+* Transformer learning rate scheduler with warmup
+
 ### 🛠️ Libraries Used
 The project is implemented using the following core libraries:
 
