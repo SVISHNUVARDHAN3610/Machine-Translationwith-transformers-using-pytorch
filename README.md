@@ -24,34 +24,6 @@ Traditional sequence models (like LSTMs) process data sequentially, which limits
 Our implementation strictly follows the standard **Encoder-Decoder** design:
 * **Encoder:** Processes the input Hindi sentence and creates a contextual understanding of it.
 * **Decoder:** Uses that understanding to generate the corresponding English translation, word by word.
-```mermaid
-graph TD
-    subgraph Inputs
-    A[Hindi Input] --> B[Embedding + Positional Encoding]
-    end
-
-    subgraph Encoder Stack
-    B --> C{Multi-Head Attention}
-    C --> D[Add & Norm]
-    D --> E[Feed Forward]
-    E --> F[Add & Norm]
-    end
-
-    subgraph Decoder Stack
-    G[English Target] --> H[Masked Multi-Head Attention]
-    H --> I[Add & Norm]
-    F --> J[Cross Attention]
-    I --> J
-    J --> K[Add & Norm]
-    K --> L[Feed Forward]
-    L --> M[Add & Norm]
-    end
-
-    subgraph Output
-    M --> N[Linear Projection]
-    N --> O[Softmax Prediction]
-    end
-```
 📄 **Original Paper:** [Read "Attention Is All You Need" on arXiv](https://arxiv.org/abs/1706.03762)
 
 # Components Implemented
@@ -65,7 +37,7 @@ graph TD
 * Linear output projection
 * Softmax-based prediction
 * Transformer learning rate scheduler with warmup
-
+---
 ### 🛠️ Libraries Used
 The project is implemented using the following core libraries:
 
@@ -74,3 +46,88 @@ The project is implemented using the following core libraries:
 * **Matplotlib:** For visualizing the loss convergence graphs during training.
 * **Pickle:** For serializing and saving loss data for post-training analysis.
 * **Sys:** For system-specific path configurations.
+---
+
+## <a name="training"></a>⚙️ Training Configuration
+
+The model is trained using a custom training loop designed for stability and observability. We utilize the **Adam Optimizer** with a specific learning rate tailored for Transformer convergence on the OpusBook dataset.
+
+### Hyperparameters
+
+| Parameter | Value | Description |
+| :--- | :---: | :--- |
+| **Batch Size** | 1 | Stochastic training (processing one sentence pair at a time). |
+| **Learning Rate** | `8.4e-5` | Carefully tuned for stable gradient descent (`0.000084`). |
+| **Embedding Dim** | 512 | The size of the vector space for tokens (`d_model`). |
+| **Attention Heads** | 8 | Parallel attention mechanisms. |
+| **Optimizer** | Adam | Adaptive Moment Estimation. |
+
+### Training Implementation
+
+The training script initializes the `OpusBook` dataset, constructs the Transformer, and iterates through the data. It features **automated checkpointing** every 30 episodes and **real-time loss visualization**.
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import matplotlib.pyplot as plt
+import pickle
+from tqdm import tqdm
+
+# --- Configuration ---
+lr = 0.000084
+d_model = 512
+heads = 8
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# --- Model Initialization ---
+# (Assumes Encoder, Decoder, and Transformer classes are imported)
+transformer = Transformer(d_model, encoder, decoder, projection, src_embedding, trg_embedding).to(device)
+optimizer = optim.Adam(transformer.parameters(), lr=lr)
+loss_fn = nn.CrossEntropyLoss()
+
+# --- Resume Training ---
+try:
+    transformer.load_state_dict(torch.load("Weights/transformer.pth"))
+    print("Loaded existing checkpoint.")
+except FileNotFoundError:
+    print("Starting training from scratch.")
+
+# --- Training Loop ---
+epoch = len(data)
+loss_history = []
+start_episode = 0  # Adjust based on saved state
+
+print(f"Training on: {device}")
+
+for i in range(start_episode, epoch):
+    # 1. Load Data
+    src, trg, src_v, trg_v = data[i]
+    src_v, trg_v = src_v.to(device), trg_v.to(device)
+
+    # 2. Forward Pass
+    pred = transformer(src_v, trg_v)
+    
+    # 3. Calculate Loss (reshaping for CrossEntropy)
+    # Note: Logic assumes prediction is [seq_len, vocab_size]
+    # We take the argmax for printing, but use raw logits for loss
+    output_logits = pred # Ensure your model returns logits here
+    
+    # Simplified Loss Calculation
+    # (Actual implementation requires handling sequence dimensions)
+    current_loss = loss_fn(output_logits, trg_v) 
+
+    # 4. Backpropagation
+    optimizer.zero_grad()
+    current_loss.backward()
+    optimizer.step()
+
+    loss_history.append(current_loss.item())
+
+    # 5. Logging & Checkpointing
+    if i % 100 == 0:
+        print(f"Episode: {i}/{epoch} | Loss: {current_loss.item():.4f}")
+
+# Save final loss data
+with open("loss", "wb") as f:
+    pickle.dump(loss_history, f)
