@@ -31,6 +31,8 @@ Our implementation strictly follows the standard **Encoder-Decoder** design:
   <br>
   <em>Figure 1: Transformer architecture</em>
 </div>
+
+
 ---
 # Components Implemented
 
