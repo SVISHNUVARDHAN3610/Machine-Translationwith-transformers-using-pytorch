@@ -24,7 +24,34 @@ Traditional sequence models (like LSTMs) process data sequentially, which limits
 Our implementation strictly follows the standard **Encoder-Decoder** design:
 * **Encoder:** Processes the input Hindi sentence and creates a contextual understanding of it.
 * **Decoder:** Uses that understanding to generate the corresponding English translation, word by word.
+```mermaid
+graph TD
+    subgraph Inputs
+    A[Hindi Input] --> B[Embedding + Positional Encoding]
+    end
 
+    subgraph Encoder Stack
+    B --> C{Multi-Head Attention}
+    C --> D[Add & Norm]
+    D --> E[Feed Forward]
+    E --> F[Add & Norm]
+    end
+
+    subgraph Decoder Stack
+    G[English Target] --> H[Masked Multi-Head Attention]
+    H --> I[Add & Norm]
+    F --> J[Cross Attention]
+    I --> J
+    J --> K[Add & Norm]
+    K --> L[Feed Forward]
+    L --> M[Add & Norm]
+    end
+
+    subgraph Output
+    M --> N[Linear Projection]
+    N --> O[Softmax Prediction]
+    end
+```
 📄 **Original Paper:** [Read "Attention Is All You Need" on arXiv](https://arxiv.org/abs/1706.03762)
 
 ### 🛠️ Libraries Used
