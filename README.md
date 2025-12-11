@@ -56,7 +56,7 @@ The model is trained using a custom training loop designed for stability and obs
 
 | Parameter | Value | Description |
 | :--- | :---: | :--- |
-| **Batch Size** | 1 | Stochastic training (processing one sentence pair at a time). |
+| **Batch Size** | 32 | Stochastic training (processing 32 sentence pair at a time). |
 | **Learning Rate** | `8.4e-5` | Carefully tuned for stable gradient descent (`0.000084`). |
 | **Embedding Dim** | 512 | The size of the vector space for tokens (`d_model`). |
 | **Attention Heads** | 8 | Parallel attention mechanisms. |
@@ -162,3 +162,23 @@ The training script automatically generates a visualization of the loss trajecto
 > **Target (Ground Truth):** "मशीन लर्निंग आकर्षक है।"
 >
 > **Model Prediction:** "मशीन लर्निंग आकर्षक है।"
+
+---
+
+## 📫 Connect with Me
+
+I am always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+
+<div align="center">
+
+[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/vishnu-vardhan-senapathi)
+[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/VishnuVardhan)
+[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:your.email@gmail.com)
+
+</div>
+
+---
+
+<div align="center">
+  <p>If you found this project useful, please consider giving it a ⭐ Star!</p>
+</div>
